@@ -1,0 +1,40 @@
+name: Deploy to Tencent Cloud
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch: {}  # 允许手动触发
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy via SSH
+        uses: appleboy/ssh-action@v1.2.2
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            set -e
+            cd /var/www/heartwrite
+
+            echo "=== 拉取最新代码 ==="
+            git pull origin main
+
+            echo "=== 更新后端依赖 ==="
+            ./backend/heartwrite-venv/bin/pip install -r backend/requirements.txt -q
+
+            echo "=== 构建前端 ==="
+            cd frontend
+            npm install --silent
+            npm run build
+            cd ..
+
+            echo "=== 重启后端 ==="
+            sudo systemctl restart heartwrite
+
+            echo "=== 重载 Nginx ==="
+            sudo nginx -t && sudo systemctl reload nginx
+
+            echo "=== 部署完成 ==="
