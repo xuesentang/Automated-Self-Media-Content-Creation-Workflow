@@ -1,9 +1,10 @@
 import { useState, useEffect } from 'react';
-import { Button, message, Card, Spin, Typography } from 'antd';
+import { Button, message, Spin } from 'antd';
 import api from '../services/api';
 import { Wand2, Check, Copy, Sparkles, FileCheck, Palette } from 'lucide-react';
 
-const { Title, Text } = Typography;
+
+
 
 interface ArticleSummary {
   id: number;

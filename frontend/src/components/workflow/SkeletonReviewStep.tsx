@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Button, Card, Typography, Space, Modal, Input } from 'antd';
+import { Button, Card, Typography, Modal, Input } from 'antd';
 import { CheckCircle, Edit3, ArrowLeft, Layout } from 'lucide-react';
 import type { Skeleton, SkeletonSection } from '../../state/appMachine.types';
 

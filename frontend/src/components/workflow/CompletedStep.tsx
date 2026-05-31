@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
-import { Button, Result, Typography, message, Modal, Checkbox, Spin, Alert } from 'antd';
-import { CheckCircle, FileText, RotateCcw, ExternalLink, Save, Loader2 } from 'lucide-react';
+import { Button, Typography, message, Modal, Checkbox, Spin, Alert } from 'antd';
+import { CheckCircle, FileText, RotateCcw, ExternalLink, Save } from 'lucide-react';
 import type { WorkflowContext as AppContext } from '../../state/appMachine.types';
 import api from '../../services/api';
 

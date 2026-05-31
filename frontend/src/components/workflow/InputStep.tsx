@@ -1,10 +1,9 @@
 import { useState } from 'react';
-import { Form, Input, Button, Typography } from 'antd';
+import { Form, Input, Button } from 'antd';
 import { Settings, Wand2, Lightbulb } from 'lucide-react';
 import type { BulletPoints } from '../../state/appMachine.types';
 
 const { TextArea } = Input;
-const { Title, Text } = Typography;
 
 interface InputStepProps {
   bulletPoints: BulletPoints;

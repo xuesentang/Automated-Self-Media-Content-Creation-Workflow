@@ -5,7 +5,7 @@ import StarterKit from '@tiptap/starter-kit';
 import { Send, CheckCircle, ArrowLeft, ArrowRight, MessageSquare, AlertTriangle, Lightbulb } from 'lucide-react';
 import type { MentorFeedback } from '../../state/appMachine.types';
 
-const { Title, Text } = Typography;
+const { Text } = Typography;
 
 interface CoachResponseStepProps {
   draft: string;

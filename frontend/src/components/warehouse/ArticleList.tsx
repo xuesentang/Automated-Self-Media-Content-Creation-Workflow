@@ -1,11 +1,9 @@
 import { useEffect, useState } from 'react';
-import { Button, Empty, Popconfirm, message, Spin } from 'antd';
+import { Button, Popconfirm, message, Spin } from 'antd';
 import { useNavigate } from 'react-router-dom';
 import api from '../../services/api';
 import { FileText, Calendar, Trash2, Eye, Sparkles } from 'lucide-react';
 
-const { Title, Text, Paragraph } = Typography;
-import { Typography } from 'antd';
 
 interface ArticleSummary {
   id: number;

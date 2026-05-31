@@ -1,5 +1,5 @@
 import { ArticleList } from '../components/warehouse/ArticleList';
-import { FileText, Search } from 'lucide-react';
+import { FileText } from 'lucide-react';
 
 export function WarehousePage() {
   return (
