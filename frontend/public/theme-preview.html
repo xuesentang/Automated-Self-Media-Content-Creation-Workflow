@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>主题对比预览</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background:#f1f5f9; padding:24px; display:flex; gap:24px; min-height:100vh; }
+  .col { flex:1; background:#fff; border-radius:12px; padding:32px; box-shadow:0 1px 3px rgba(0,0,0,.1); }
+  .col h2 { margin-bottom:24px; padding-bottom:12px; border-bottom:1px solid #e2e8f0; font-size:18px; }
+  .section { margin-bottom:28px; }
+  .section-label { font-size:12px; text-transform:uppercase; color:#94a3b8; margin-bottom:12px; letter-spacing:.5px; }
+
+  /* Current (Ant Design default) */
+  .current-btn { background:#1677ff; color:#fff; border:none; padding:8px 20px; border-radius:6px; font-size:14px; cursor:pointer; height:36px; }
+  .current-btn:hover { background:#4096ff; }
+  .current-card { border:1px solid #f0f0f0; border-radius:8px; padding:20px; }
+  .current-card h4 { font-size:16px; color:#000000e0; margin-bottom:8px; }
+  .current-card p { font-size:14px; color:#00000073; }
+  .current-input { border:1px solid #d9d9d9; border-radius:6px; padding:8px 12px; font-size:14px; width:100%; height:36px; }
+  .current-input:focus { outline:none; border-color:#1677ff; box-shadow:0 0 0 2px rgba(22,119,255,.1); }
+  .current-steps { display:flex; gap:8px; }
+  .current-step { flex:1; text-align:center; padding:8px; background:#1677ff; color:#fff; border-radius:6px; font-size:12px; }
+  .current-step.done { background:#f0f0f0; color:#00000073; }
+  .current-tag { display:inline-block; padding:2px 10px; background:rgba(22,119,255,.06); color:#1677ff; border:1px solid rgba(22,119,255,.15); border-radius:4px; font-size:12px; }
+  .current-menu { display:flex; gap:0; background:#001529; border-radius:6px; overflow:hidden; margin-bottom:16px; }
+  .current-menu-item { padding:10px 18px; color:rgba(255,255,255,.65); font-size:14px; cursor:pointer; }
+  .current-menu-item.active { color:#fff; background:#1677ff; }
+
+  /* Proposed */
+  .new-btn { background:#1e293b; color:#fff; border:none; padding:8px 20px; border-radius:4px; font-size:14px; font-family:'Inter',-apple-system,sans-serif; cursor:pointer; height:36px; letter-spacing:-.01em; }
+  .new-btn:hover { background:#334155; }
+  .new-btn.primary { background:#2563eb; }
+  .new-btn.primary:hover { background:#1d4ed8; }
+  .new-card { border:1px solid #e2e8f0; border-radius:4px; padding:20px; font-family:'Inter',-apple-system,sans-serif; }
+  .new-card h4 { font-size:16px; font-weight:600; color:#0f172a; margin-bottom:8px; letter-spacing:-.01em; }
+  .new-card p { font-size:14px; color:#475569; line-height:1.6; }
+  .new-input { border:1px solid #cbd5e1; border-radius:4px; padding:8px 12px; font-size:14px; width:100%; height:36px; font-family:'Inter',-apple-system,sans-serif; }
+  .new-input:focus { outline:none; border-color:#2563eb; box-shadow:0 0 0 3px rgba(37,99,235,.12); }
+  .new-steps { display:flex; gap:6px; }
+  .new-step { flex:1; text-align:center; padding:8px; background:#1e293b; color:#fff; border-radius:4px; font-size:12px; font-family:'Inter',-apple-system,sans-serif; letter-spacing:-.01em; }
+  .new-step.done { background:#f1f5f9; color:#94a3b8; }
+  .new-tag { display:inline-block; padding:2px 10px; background:#eff6ff; color:#1d4ed8; border:1px solid #bfdbfe; border-radius:4px; font-size:12px; font-family:'Inter',-apple-system,sans-serif; }
+  .new-menu { display:flex; gap:0; background:#0f172a; border-radius:4px; overflow:hidden; margin-bottom:16px; }
+  .new-menu-item { padding:10px 18px; color:rgba(255,255,255,.6); font-size:14px; cursor:pointer; font-family:'Inter',-apple-system,sans-serif; }
+  .new-menu-item.active { color:#fff; background:#2563eb; }
+
+  .compare-note { font-size:13px; color:#94a3b8; margin-top:16px; padding:12px; background:#f8fafc; border-radius:4px; border-left:3px solid #e2e8f0; }
+</style>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<div class="col">
+  <h2>当前 — Ant Design 默认</h2>
+
+  <div class="section">
+    <div class="section-label">导航</div>
+    <div class="current-menu">
+      <div class="current-menu-item active">创作工作流</div>
+      <div class="current-menu-item">文章仓库</div>
+      <div class="current-menu-item">风格Skill</div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-label">进度步骤</div>
+    <div class="current-steps">
+      <div class="current-step done">结构化输入</div>
+      <div class="current-step done">骨架审核</div>
+      <div class="current-step">核心写作</div>
+      <div class="current-step done" style="background:#f0f0f0;color:#00000073;">导师反馈</div>
+      <div class="current-step done" style="background:#f0f0f0;color:#00000073;">完成</div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-label">卡片</div>
+    <div class="current-card">
+      <h4>文章骨架标题</h4>
+      <p>以真实经历引发共鸣，还原使用AI编程的场景与困惑。引导读者思考编程门槛的变化。</p>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-label">表单</div>
+    <input class="current-input" placeholder="描述你的实操经历...">
+  </div>
+
+  <div class="section">
+    <div class="section-label">操作</div>
+    <button class="current-btn">确认骨架，进入写作</button>
+    <span class="current-tag" style="margin-left:8px;">P1 优先级</span>
+  </div>
+
+  <div class="compare-note">
+    感觉：企业后台管理面板 | 圆角8px偏软 | 蓝色#1677ff是Ant Design标志色
+  </div>
+</div>
+
+<div class="col">
+  <h2>提案 — 专业创作工具</h2>
+
+  <div class="section">
+    <div class="section-label">导航</div>
+    <div class="new-menu">
+      <div class="new-menu-item active">创作工作流</div>
+      <div class="new-menu-item">文章仓库</div>
+      <div class="new-menu-item">风格Skill</div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-label">进度步骤</div>
+    <div class="new-steps">
+      <div class="new-step done">结构化输入</div>
+      <div class="new-step done">骨架审核</div>
+      <div class="new-step">核心写作</div>
+      <div class="new-step done" style="background:#f1f5f9;color:#94a3b8;">导师反馈</div>
+      <div class="new-step done" style="background:#f1f5f9;color:#94a3b8;">完成</div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-label">卡片</div>
+    <div class="new-card">
+      <h4>文章骨架标题</h4>
+      <p>以真实经历引发共鸣，还原使用AI编程的场景与困惑。引导读者思考编程门槛的变化。</p>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-label">表单</div>
+    <input class="new-input" placeholder="描述你的实操经历...">
+  </div>
+
+  <div class="section">
+    <div class="section-label">操作</div>
+    <button class="new-btn primary">确认骨架，进入写作</button>
+    <span class="new-tag" style="margin-left:8px;">P1 优先级</span>
+  </div>
+
+  <div class="compare-note">
+    感觉：专业创作工具 | 圆角4px偏锐利 | 深蓝灰#1E293B更沉稳 | Inter字体更清晰
+  </div>
+</div>
+
+</body>
+</html>

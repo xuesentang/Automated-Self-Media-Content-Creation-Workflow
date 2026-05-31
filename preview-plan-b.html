@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>方案B预览 - 骨架内嵌编辑器</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Noto Sans SC', sans-serif; }
+        .section-card { 
+            transition: all 0.3s ease;
+            border-left: 3px solid transparent;
+        }
+        .section-card:hover { 
+            transform: translateY(-2px); 
+            box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+        }
+        .section-card.active {
+            border-left-color: #3B82F6;
+            background: #F8FAFC;
+        }
+        .editor-textarea:focus { 
+            outline: none; 
+            background: #FAFBFC;
+        }
+        .progress-bar {
+            transition: width 0.5s ease;
+        }
+        /* 自定义滚动条 */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+        
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in-up {
+            animation: fadeInUp 0.5s ease forwards;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 min-h-screen">
+    <!-- 顶部导航 -->
+    <header class="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-slate-200">
+        <div class="max-w-7xl mx-auto px-6 h-16 flex items-center">
+            <div class="flex items-center gap-3 mr-10">
+                <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-500 to-blue-700 flex items-center justify-center">
+                    <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+                    </svg>
+                </div>
+                <span class="font-bold text-lg text-slate-900">AI深度创作引擎</span>
+            </div>
+            <nav class="flex gap-1">
+                <button class="px-4 py-2 rounded-lg text-sm font-medium bg-blue-50 text-blue-600">创作工作流</button>
+                <button class="px-4 py-2 rounded-lg text-sm font-medium text-slate-600 hover:bg-slate-50">文章仓库</button>
+                <button class="px-4 py-2 rounded-lg text-sm font-medium text-slate-600 hover:bg-slate-50">风格Skill</button>
+            </nav>
+            <div class="ml-auto flex items-center gap-3">
+                <div class="w-8 h-8 rounded-full bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center text-white font-medium text-sm">U</div>
+            </div>
+        </div>
+    </header>
+
+    <div class="max-w-7xl mx-auto px-6 py-6 flex gap-6">
+        <!-- 左侧步骤导航 -->
+        <aside class="w-64 flex-shrink-0">
+            <h3 class="text-sm font-semibold text-slate-400 uppercase tracking-wider mb-6">创作流程</h3>
+            <div class="space-y-4">
+                <div class="flex items-start gap-3">
+                    <div class="w-8 h-8 rounded-full bg-green-500 flex items-center justify-center flex-shrink-0">
+                        <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <p class="text-sm font-medium text-slate-900">结构化输入</p>
+                        <p class="text-xs text-slate-500">输入你的经历和想法</p>
+                    </div>
+                </div>
+                <div class="flex items-start gap-3">
+                    <div class="w-8 h-8 rounded-full bg-green-500 flex items-center justify-center flex-shrink-0">
+                        <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <p class="text-sm font-medium text-slate-900">骨架审核</p>
+                        <p class="text-xs text-slate-500">确认文章结构</p>
+                    </div>
+                </div>
+                <div class="flex items-start gap-3">
+                    <div class="w-8 h-8 rounded-full bg-blue-600 flex items-center justify-center flex-shrink-0 text-white font-medium text-sm">3</div>
+                    <div>
+                        <p class="text-sm font-medium text-slate-900">核心写作</p>
+                        <p class="text-xs text-slate-500">撰写文章初稿</p>
+                    </div>
+                </div>
+                <div class="flex items-start gap-3 opacity-50">
+                    <div class="w-8 h-8 rounded-full bg-slate-200 flex items-center justify-center flex-shrink-0 text-slate-400 font-medium text-sm">4</div>
+                    <div>
+                        <p class="text-sm font-medium text-slate-900">导师反馈</p>
+                        <p class="text-xs text-slate-500">获取AI导师建议</p>
+                    </div>
+                </div>
+                <div class="flex items-start gap-3 opacity-50">
+                    <div class="w-8 h-8 rounded-full bg-slate-200 flex items-center justify-center flex-shrink-0 text-slate-400 font-medium text-sm">5</div>
+                    <div>
+                        <p class="text-sm font-medium text-slate-900">终审定稿</p>
+                        <p class="text-xs text-slate-500">最终审核确认</p>
+                    </div>
+                </div>
+                <div class="flex items-start gap-3 opacity-50">
+                    <div class="w-8 h-8 rounded-full bg-slate-200 flex items-center justify-center flex-shrink-0 text-slate-400 font-medium text-sm">6</div>
+                    <div>
+                        <p class="text-sm font-medium text-slate-900">完成</p>
+                        <p class="text-xs text-slate-500">保存或发布</p>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- 中间主内容区 -->
+        <main class="flex-1 min-w-0">
+            <!-- 页面标题 -->
+            <div class="mb-6 flex items-center justify-between">
+                <div>
+                    <h1 class="text-xl font-bold text-slate-900 mb-1">核心写作</h1>
+                    <p class="text-sm text-slate-500">逐节撰写，每节都有引导问题辅助你写作</p>
+                </div>
+                <div class="flex items-center gap-2 text-sm text-slate-500">
+                    <div class="w-32 h-2 bg-slate-200 rounded-full overflow-hidden">
+                        <div class="progress-bar h-full bg-blue-500 rounded-full" style="width: 0%" id="progress-bar"></div>
+                    </div>
+                    <span id="progress-text">0/3 节</span>
+                </div>
+            </div>
+
+            <!-- 章节卡片列表 -->
+            <div class="space-y-4" id="sections-container">
+                <!-- 第1节 -->
+                <div class="section-card bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden animate-fade-in-up" style="animation-delay: 0.1s" data-section="1">
+                    <div class="px-6 py-4 border-b border-slate-100 flex items-center justify-between">
+                        <div class="flex items-center gap-3">
+                            <div class="w-8 h-8 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center text-sm font-bold">1</div>
+                            <div>
+                                <h3 class="font-semibold text-slate-800">你遇到的第一个bug，暴露了你对AI编程的最大误解</h3>
+                                <p class="text-xs text-slate-400 mt-0.5">约 300-500 字</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <span class="text-xs text-slate-400" id="status-1">未开始</span>
+                            <div class="w-2 h-2 rounded-full bg-slate-300" id="dot-1"></div>
+                        </div>
+                    </div>
+                    <div class="px-6 py-4">
+                        <div class="bg-amber-50 rounded-xl p-4 mb-4 border border-amber-100">
+                            <div class="flex items-center gap-2 mb-2">
+                                <svg class="w-4 h-4 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/>
+                                </svg>
+                                <span class="text-sm font-medium text-amber-800">引导问题</span>
+                            </div>
+                            <ul class="space-y-2 text-sm text-amber-700">
+                                <li class="flex items-start gap-2">
+                                    <span class="mt-1">•</span>
+                                    <span>你第一次用AI生成代码时，看到一堆bug却完全看不懂，当时你是怎么描述问题给AI的？</span>
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <span class="mt-1">•</span>
+                                    <span>你试过一次性描述完整需求，还是分步骤描述？两种方式的结果有什么差异？</span>
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <span class="mt-1">•</span>
+                                    <span>如果让你重来一次，你会如何改变描述问题的方式？</span>
+                                </li>
+                            </ul>
+                        </div>
+                        <textarea 
+                            class="editor-textarea w-full min-h-[200px] resize-y text-base leading-relaxed text-slate-800 placeholder-slate-400 border border-slate-200 rounded-xl p-4 focus:border-blue-300 transition-colors"
+                            placeholder="开始写第一节...&#10;&#10;可以从你第一次接触AI编程的经历开始，描述当时的困惑和发现。"
+                            oninput="updateProgress(1, this.value)"
+                        ></textarea>
+                        <div class="flex items-center justify-between mt-3">
+                            <span class="text-xs text-slate-400" id="count-1">0 字</span>
+                            <button class="text-sm text-blue-600 hover:text-blue-700 font-medium flex items-center gap-1" onclick="focusNext(2)">
+                                下一节
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 第2节 -->
+                <div class="section-card bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden animate-fade-in-up" style="animation-delay: 0.2s" data-section="2">
+                    <div class="px-6 py-4 border-b border-slate-100 flex items-center justify-between">
+                        <div class="flex items-center gap-3">
+                            <div class="w-8 h-8 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center text-sm font-bold">2</div>
+                            <div>
+                                <h3 class="font-semibold text-slate-800">95%的人以为AI编程在考代码，其实它在考「拆解力」</h3>
+                                <p class="text-xs text-slate-400 mt-0.5">约 400-600 字</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <span class="text-xs text-slate-400" id="status-2">未开始</span>
+                            <div class="w-2 h-2 rounded-full bg-slate-300" id="dot-2"></div>
+                        </div>
+                    </div>
+                    <div class="px-6 py-4">
+                        <div class="bg-amber-50 rounded-xl p-4 mb-4 border border-amber-100">
+                            <div class="flex items-center gap-2 mb-2">
+                                <svg class="w-4 h-4 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/>
+                                </svg>
+                                <span class="text-sm font-medium text-amber-800">引导问题</span>
+                            </div>
+                            <ul class="space-y-2 text-sm text-amber-700">
+                                <li class="flex items-start gap-2">
+                                    <span class="mt-1">•</span>
+                                    <span>你有没有过这样的时候——把一大需求丢给AI，结果它生成的代码完全跑偏？你当时的第一反应是什么？</span>
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <span class="mt-1">•</span>
+                                    <span>你尝试把需求拆成多个小步骤后，AI的反应和效果有什么变化？</span>
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <span class="mt-1">•</span>
+                                    <span>身边的朋友或同事对AI编程的普遍看法是什么？他们是否低估了「描述问题」的难度？</span>
+                                </li>
+                            </ul>
+                        </div>
+                        <textarea 
+                            class="editor-textarea w-full min-h-[200px] resize-y text-base leading-relaxed text-slate-800 placeholder-slate-400 border border-slate-200 rounded-xl p-4 focus:border-blue-300 transition-colors"
+                            placeholder="开始写第二节...&#10;&#10;这里可以分享你关于「拆解力」的思考和实践。"
+                            oninput="updateProgress(2, this.value)"
+                        ></textarea>
+                        <div class="flex items-center justify-between mt-3">
+                            <span class="text-xs text-slate-400" id="count-2">0 字</span>
+                            <button class="text-sm text-blue-600 hover:text-blue-700 font-medium flex items-center gap-1" onclick="focusNext(3)">
+                                下一节
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 第3节 -->
+                <div class="section-card bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden animate-fade-in-up" style="animation-delay: 0.3s" data-section="3">
+                    <div class="px-6 py-4 border-b border-slate-100 flex items-center justify-between">
+                        <div class="flex items-center gap-3">
+                            <div class="w-8 h-8 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center text-sm font-bold">3</div>
+                            <div>
+                                <h3 class="font-semibold text-slate-800">不是代码门槛降低了，是「翻译能力」成了新护城河</h3>
+                                <p class="text-xs text-slate-400 mt-0.5">约 300-500 字</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <span class="text-xs text-slate-400" id="status-3">未开始</span>
+                            <div class="w-2 h-2 rounded-full bg-slate-300" id="dot-3"></div>
+                        </div>
+                    </div>
+                    <div class="px-6 py-4">
+                        <div class="bg-amber-50 rounded-xl p-4 mb-4 border border-amber-100">
+                            <div class="flex items-center gap-2 mb-2">
+                                <svg class="w-4 h-4 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/>
+                                </svg>
+                                <span class="text-sm font-medium text-amber-800">引导问题</span>
+                            </div>
+                            <ul class="space-y-2 text-sm text-amber-700">
+                                <li class="flex items-start gap-2">
+                                    <span class="mt-1">•</span>
+                                    <span>你在描述上一个bug时，用了哪些具体的术语或比喻？有没有哪次因为描述不清导致AI反复改错？</span>
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <span class="mt-1">•</span>
+                                    <span>你平时在面对复杂任务时（不限于编程），会怎么拆解它？这种拆解能力是怎么练出来的？</span>
+                                </li>
+                            </ul>
+                        </div>
+                        <textarea 
+                            class="editor-textarea w-full min-h-[200px] resize-y text-base leading-relaxed text-slate-800 placeholder-slate-400 border border-slate-200 rounded-xl p-4 focus:border-blue-300 transition-colors"
+                            placeholder="开始写第三节...&#10;&#10;总结你的核心观点，给读者留下深刻印象。"
+                            oninput="updateProgress(3, this.value)"
+                        ></textarea>
+                        <div class="flex items-center justify-between mt-3">
+                            <span class="text-xs text-slate-400" id="count-3">0 字</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 底部操作栏 -->
+            <div class="mt-6 flex items-center justify-between bg-white rounded-2xl border border-slate-200 shadow-sm p-4">
+                <button class="px-4 py-2 rounded-lg border border-slate-300 text-slate-600 text-sm font-medium hover:bg-slate-50 transition-colors flex items-center gap-2">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+                    </svg>
+                    返回修改骨架
+                </button>
+                <div class="flex items-center gap-4">
+                    <span class="text-sm text-slate-500">总字数：<span id="total-count" class="font-semibold text-slate-800">0</span></span>
+                    <button class="px-6 py-2 rounded-lg bg-blue-600 text-white text-sm font-medium hover:bg-blue-700 transition-colors flex items-center gap-2 shadow-sm shadow-blue-200">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/>
+                        </svg>
+                        提交初稿，请导师审阅
+                    </button>
+                </div>
+            </div>
+        </main>
+
+        <!-- 右侧辅助面板 -->
+        <aside class="w-72 flex-shrink-0 space-y-4">
+            <!-- 创作技巧 -->
+            <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-5">
+                <div class="flex items-center gap-2 mb-4">
+                    <svg class="w-5 h-5 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/>
+                    </svg>
+                    <h3 class="font-semibold text-slate-800">创作技巧</h3>
+                </div>
+                <div class="space-y-3">
+                    <div class="flex gap-3">
+                        <div class="w-6 h-6 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center text-xs font-bold flex-shrink-0">1</div>
+                        <p class="text-sm text-slate-600">逐节写作，每节聚焦一个核心观点</p>
+                    </div>
+                    <div class="flex gap-3">
+                        <div class="w-6 h-6 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center text-xs font-bold flex-shrink-0">2</div>
+                        <p class="text-sm text-slate-600">引导问题只是参考，可以用自己的方式表达</p>
+                    </div>
+                    <div class="flex gap-3">
+                        <div class="w-6 h-6 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center text-xs font-bold flex-shrink-0">3</div>
+                        <p class="text-sm text-slate-600">节与节之间要有过渡，保持文章连贯性</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 当前状态 -->
+            <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-5">
+                <h3 class="font-semibold text-slate-800 mb-3">当前状态</h3>
+                <div class="flex items-center gap-2 text-sm text-blue-600">
+                    <div class="w-2 h-2 rounded-full bg-blue-500 animate-pulse"></div>
+                    <span>写作中</span>
+                </div>
+            </div>
+
+            <!-- 快捷操作 -->
+            <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-5">
+                <h3 class="font-semibold text-slate-800 mb-3">快捷操作</h3>
+                <div class="space-y-2">
+                    <button class="w-full flex items-center justify-between px-3 py-2 rounded-lg text-sm text-slate-600 hover:bg-slate-50 transition-colors">
+                        <span>打开知识库</span>
+                        <span class="text-xs text-slate-400 bg-slate-100 px-2 py-1 rounded">K</span>
+                    </button>
+                    <button class="w-full flex items-center justify-between px-3 py-2 rounded-lg text-sm text-slate-600 hover:bg-slate-50 transition-colors">
+                        <span>保存文章</span>
+                        <span class="text-xs text-slate-400 bg-slate-100 px-2 py-1 rounded">Ctrl+S</span>
+                    </button>
+                </div>
+            </div>
+        </aside>
+    </div>
+
+    <script>
+        const sectionStatus = { 1: false, 2: false, 3: false };
+        const sectionWords = { 1: 0, 2: 0, 3: 0 };
+
+        function updateProgress(section, value) {
+            const count = value.length;
+            sectionWords[section] = count;
+            
+            // 更新单节字数
+            document.getElementById(`count-${section}`).textContent = count + ' 字';
+            
+            // 更新状态
+            const statusEl = document.getElementById(`status-${section}`);
+            const dotEl = document.getElementById(`dot-${section}`);
+            const cardEl = document.querySelector(`[data-section="${section}"]`);
+            
+            if (count > 0) {
+                sectionStatus[section] = true;
+                statusEl.textContent = '进行中';
+                statusEl.className = 'text-xs text-blue-600';
+                dotEl.className = 'w-2 h-2 rounded-full bg-blue-500';
+                cardEl.classList.add('active');
+            } else {
+                sectionStatus[section] = false;
+                statusEl.textContent = '未开始';
+                statusEl.className = 'text-xs text-slate-400';
+                dotEl.className = 'w-2 h-2 rounded-full bg-slate-300';
+                cardEl.classList.remove('active');
+            }
+            
+            // 更新总进度
+            const completed = Object.values(sectionStatus).filter(Boolean).length;
+            const total = Object.keys(sectionStatus).length;
+            const percentage = (completed / total) * 100;
+            
+            document.getElementById('progress-bar').style.width = percentage + '%';
+            document.getElementById('progress-text').textContent = `${completed}/${total} 节`;
+            
+            // 更新总字数
+            const totalWords = Object.values(sectionWords).reduce((a, b) => a + b, 0);
+            document.getElementById('total-count').textContent = totalWords;
+        }
+
+        function focusNext(section) {
+            const textarea = document.querySelector(`[data-section="${section}"] textarea`);
+            if (textarea) {
+                textarea.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                textarea.focus();
+            }
+        }
+    </script>
+</body>
+</html>

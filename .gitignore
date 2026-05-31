@@ -1,0 +1,17 @@
+node_modules/
+__pycache__/
+*.pyc
+.env
+backend/data/app.db
+dist/
+.vite/
+.DS_Store
+*.log
+heartwrite-venv/
+backend/heartwrite-venv/
+.claude/settings.local.json
+before-reload
+check-blank-page
+theme-comparison
+theme-v2-full
+viewport-screenshot
