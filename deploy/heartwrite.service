@@ -1,0 +1,15 @@
+[Unit]
+Description=HeartWrite Backend
+After=network.target
+
+[Service]
+Type=simple
+User=root
+WorkingDirectory=/var/www/heartwrite/backend
+EnvironmentFile=/var/www/heartwrite/.env
+ExecStart=/var/www/heartwrite/backend/heartwrite-venv/bin/uvicorn main:app --host 127.0.0.1 --port 8000
+Restart=always
+RestartSec=3
+
+[Install]
+WantedBy=multi-user.target
